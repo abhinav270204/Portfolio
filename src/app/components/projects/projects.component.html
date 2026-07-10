@@ -1,0 +1,19 @@
+<section class="section" id="projects">
+  <div class="eyebrow">projects</div>
+  <h2 class="section-title">Systems built for people who don't get to choose their software.</h2>
+
+  <div class="grid">
+    <div class="project card" *ngFor="let p of projects">
+      <div class="project-head">
+        <span class="mono project-id">{{ p.id }}</span>
+        <span class="tag">{{ p.status }}</span>
+      </div>
+      <h3>{{ p.name }}</h3>
+      <span class="mono project-org">{{ p.org }}</span>
+      <p class="project-desc">{{ p.description }}</p>
+      <div class="stack mono">
+        <span *ngFor="let s of p.stack">{{ s }}</span>
+      </div>
+    </div>
+  </div>
+</section>

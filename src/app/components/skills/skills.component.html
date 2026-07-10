@@ -1,0 +1,13 @@
+<section class="section" id="skills">
+  <div class="eyebrow">stack</div>
+  <h2 class="section-title">What's running under the hood.</h2>
+
+  <div class="manifest card mono">
+    <div class="manifest-row" *ngFor="let group of groups">
+      <span class="key">{{ group.key }}:</span>
+      <span class="values">
+        <span class="val" *ngFor="let v of group.values; let last = last">{{ v }}<span class="comma" *ngIf="!last">,</span></span>
+      </span>
+    </div>
+  </div>
+</section>

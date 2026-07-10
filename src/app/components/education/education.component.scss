@@ -1,0 +1,20 @@
+.edu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+h3 { font-size: 18px; margin-bottom: 6px; }
+
+.edu-sub { font-size: 13px; color: var(--text-faint); }
+
+.edu-date {
+  font-size: 12px;
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+  padding: 5px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}

@@ -1,0 +1,65 @@
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow">status: open to opportunities</div>
+      <h1>
+        Abhinav Ram Tripathi builds
+        <span class="accent">access-controlled</span>
+        systems that governments actually run on.
+      </h1>
+      <p class="lede">
+        Full-stack developer specializing in Angular, Node.js, and PostgreSQL.
+        Shipped authentication, role hierarchies, and workflow automation for
+        two production government portals used by 10,000+ stakeholders across Maharashtra.
+      </p>
+      <div class="cta-row">
+        <a href="#projects" class="btn btn-primary">view the work</a>
+        <a href="/assets/Tripathi_Abhinav_Resume_fresher.pdf" target="_blank" class="btn">↓ resume.pdf</a>
+      </div>
+      <div class="meta-row mono">
+        <a href="https://github.com/abhinav270204" target="_blank">github</a>
+        <span class="dot">·</span>
+        <a href="https://linkedin.com/in/abhinavram27" target="_blank">linkedin</a>
+        <span class="dot">·</span>
+        <span>Noida, IN</span>
+      </div>
+    </div>
+
+    <div class="panel card" role="img" aria-label="Simulated access control panel showing role-based permission checks">
+      <div class="panel-head">
+        <span class="mono panel-title">access_control.sys</span>
+        <span class="tag" [class.live]="true">● live demo</span>
+      </div>
+
+      <div class="otp-row mono">
+        <span class="otp-label">OTP verification</span>
+        <div class="otp-boxes">
+          <span class="otp-box" *ngFor="let d of otpDigits; let i = index" [class.filled]="i < otpFilledCount">{{ i <
+              otpFilledCount ? d : '' }}</span>
+        </div>
+        <span class="otp-status" [class.ok]="otpVerified">{{ otpVerified ? 'verified' : (otpFilledCount > 0 ? 'sending…'
+          : 'idle') }}</span>
+      </div>
+
+      <div class="tiers">
+        <div class="tier" *ngFor="let tier of tiers; let i = index" [class.active]="activeTier >= i">
+          <div class="tier-node">
+            <span class="tier-check" *ngIf="activeTier > i">✓</span>
+            <span class="tier-check pending" *ngIf="activeTier === i">…</span>
+          </div>
+          <div class="tier-label">
+            <span class="mono tier-name">{{ tier.name }}</span>
+            <span class="tier-scope">{{ tier.scope }}</span>
+          </div>
+          <div class="tier-line" *ngIf="i < tiers.length - 1"></div>
+        </div>
+      </div>
+
+      <div class="panel-footer mono">
+        <span>15+ guarded routes</span>
+        <span>3-tier RBAC</span>
+        <span>5min TTL</span>
+      </div>
+    </div>
+  </div>
+</section>
