@@ -1,13 +1,182 @@
 <section class="section" id="skills">
-  <div class="eyebrow">stack</div>
-  <h2 class="section-title">What's running under the hood.</h2>
+  <div class="eyebrow">system capabilities & stack</div>
+  <h2 class="section-title">Engineered for enterprise scale, security & high concurrency.</h2>
 
-  <div class="manifest card mono">
-    <div class="manifest-row" *ngFor="let group of groups">
-      <span class="key">{{ group.key }}:</span>
-      <span class="values">
-        <span class="val" *ngFor="let v of group.values; let last = last">{{ v }}<span class="comma" *ngIf="!last">,</span></span>
-      </span>
+  <!-- Interactive Controls Bar -->
+  <div class="controls-bar">
+    <!-- Category Filter Tabs -->
+    <div class="category-tabs mono">
+      <button
+        *ngFor="let cat of categories"
+        type="button"
+        class="cat-tab"
+        [class.active]="activeCategory === cat.id"
+        (click)="setCategory(cat.id)">
+        {{ cat.label }}
+        <span class="cat-count">{{ cat.count }}</span>
+      </button>
+    </div>
+
+    <!-- Search & View Mode Controls -->
+    <div class="right-controls">
+      <!-- Search Input -->
+      <div class="search-box mono">
+        <svg class="search-icon" viewBox="0 0 20 20" width="14" height="14" fill="currentColor">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+        </svg>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          placeholder="Filter skills, tech, or systems…"
+          aria-label="Search skills"
+          class="search-input"
+        />
+        <button *ngIf="searchQuery" type="button" (click)="clearSearch()" class="clear-btn" aria-label="Clear search">✕</button>
+      </div>
+
+      <!-- View Mode Toggle -->
+      <div class="view-toggle mono">
+        <button
+          type="button"
+          class="toggle-btn"
+          [class.active]="viewMode === 'grid'"
+          (click)="setViewMode('grid')"
+          title="Grid Matrix View">
+          <span>Grid</span>
+        </button>
+        <button
+          type="button"
+          class="toggle-btn"
+          [class.active]="viewMode === 'architecture'"
+          (click)="setViewMode('architecture')"
+          title="Architecture Layers View">
+          <span>Architecture</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW MODE 1: Interactive Grid Matrix with Live Inspector -->
+  <div class="skills-layout" *ngIf="viewMode === 'grid'">
+    <!-- Skills Grid List -->
+    <div class="skills-grid">
+      <div
+        *ngFor="let skill of filteredSkills"
+        class="skill-card card"
+        [class.selected]="selectedSkill.id === skill.id"
+        (mouseenter)="selectSkill(skill)"
+        (click)="selectSkill(skill)">
+        <div class="skill-card-head">
+          <span class="skill-icon">{{ skill.icon }}</span>
+          <span class="skill-level tag">{{ skill.level }}</span>
+        </div>
+
+        <h4 class="skill-name">{{ skill.name }}</h4>
+        <span class="skill-category mono">{{ skill.categoryLabel }}</span>
+
+        <!-- Telemetry bar -->
+        <div class="telemetry-track">
+          <div class="telemetry-bar" [style.width.%]="skill.score"></div>
+        </div>
+
+        <!-- Used in project tags -->
+        <div class="skill-used-in mono">
+          <span *ngFor="let p of skill.usedIn | slice:0:2">{{ p }}</span>
+          <span *ngIf="skill.usedIn.length > 2">+{{ skill.usedIn.length - 2 }}</span>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state card mono" *ngIf="filteredSkills.length === 0">
+        <p>No technologies found matching "{{ searchQuery }}".</p>
+        <button type="button" class="btn btn-primary" (click)="clearSearch(); setCategory('all')">Reset filters</button>
+      </div>
+    </div>
+
+    <!-- Live Telemetry Inspector Panel -->
+    <div class="inspector-wrapper" *ngIf="selectedSkill">
+      <div class="inspector card mono">
+        <div class="inspector-header">
+          <div class="terminal-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <span class="inspector-title">telemetry_inspector.sys</span>
+          <span class="status-live">● ACTIVE</span>
+        </div>
+
+        <div class="inspector-body">
+          <div class="selected-hero">
+            <span class="selected-icon">{{ selectedSkill.icon }}</span>
+            <div>
+              <h3 class="selected-name">{{ selectedSkill.name }}</h3>
+              <span class="selected-meta">{{ selectedSkill.categoryLabel }} · {{ selectedSkill.experience }}</span>
+            </div>
+          </div>
+
+          <div class="metric-row">
+            <span class="metric-label">Competency Rating:</span>
+            <span class="metric-value accent">{{ selectedSkill.score }}% [{{ selectedSkill.level }}]</span>
+          </div>
+
+          <div class="metric-track">
+            <div class="metric-fill" [style.width.%]="selectedSkill.score"></div>
+          </div>
+
+          <div class="capabilities-block">
+            <span class="block-label">// Technical Capabilities</span>
+            <ul class="cap-list">
+              <li *ngFor="let cap of selectedSkill.capabilities">
+                <span class="cap-bullet">▹</span>
+                <span>{{ cap }}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="deployments-block">
+            <span class="block-label">// Verified Production Implementations</span>
+            <div class="deployment-tags">
+              <span *ngFor="let project of selectedSkill.usedIn" class="dep-tag">
+                <span class="dep-dot">●</span>
+                {{ project }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="inspector-footer">
+          <span>Module: {{ selectedSkill.id }}.node</span>
+          <span>Status: Verified</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW MODE 2: Multi-Tier Architecture Layers View -->
+  <div class="architecture-view" *ngIf="viewMode === 'architecture'">
+    <div class="arch-layer card" *ngFor="let layer of architectureLayers; let i = index">
+      <div class="layer-header">
+        <div class="layer-tier-badge mono" [style.borderColor]="layer.badgeColor" [style.color]="layer.badgeColor">
+          {{ layer.tier }}
+        </div>
+        <div class="layer-info">
+          <h3 class="layer-title">{{ layer.title }}</h3>
+          <p class="layer-desc">{{ layer.description }}</p>
+        </div>
+      </div>
+
+      <div class="layer-skills mono">
+        <span *ngFor="let s of layer.skills" class="layer-skill-pill">
+          <span class="pill-dot" [style.backgroundColor]="layer.badgeColor"></span>
+          {{ s }}
+        </span>
+      </div>
+
+      <div class="layer-connector" *ngIf="i < architectureLayers.length - 1">
+        <div class="connector-line"></div>
+        <span class="connector-arrow mono">↓ data flow</span>
+      </div>
     </div>
   </div>
 </section>

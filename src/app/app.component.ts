@@ -7,10 +7,13 @@ import { SkillsComponent } from './components/skills/skills.component';
 import { EducationComponent } from './components/education/education.component';
 import { ContactComponent } from './components/contact/contact.component';
 
+import { SystemBackgroundComponent } from './components/system-bg/system-bg.component';
+
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    SystemBackgroundComponent,
     NavComponent,
     HeroComponent,
     ExperienceComponent,
